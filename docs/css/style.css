@@ -1,0 +1,33 @@
+body {
+  background: black;
+  text-align: center;
+  margin-top: 32px;
+}
+
+input[type=text] {
+  color: white;
+  background: black;
+  border: 0;
+  font: normal 30px courier;
+  text-align: center;
+  outline: none;
+}
+
+.octet {
+  color: lime;
+  font: bold 22px courier;
+  -webkit-font-smoothing: antialiased;
+  margin-left: .4rem;
+}
+
+.octet:first-child {
+  margin-left: 0;
+}
+
+.header {
+  color: gray;
+}
+
+.insignificant {
+  opacity: .5;
+}
