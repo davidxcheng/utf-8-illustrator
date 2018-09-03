@@ -5,7 +5,20 @@ var elInput = document.getElementById("txtInput");
 var elOutput = document.getElementById("output");
 
 elInput.addEventListener("input", e => {
-  elInput.value.split("").forEach(char => {
-    elOutput.innerHTML = y(x(char.codePointAt(0)))
+  elOutput.innerHTML = "";
+
+  e.target.value.split("").forEach(char => {
+    var codePoint = char.codePointAt(0);
+    var utf8OctetsMarkup = y(x(codePoint));
+
+    elOutput.innerHTML =
+    `
+      ${elOutput.innerHTML}
+      <tr>
+        <td class="char">${char}</td>
+        <td class="dec">${codePoint}</td>
+        <td>${utf8OctetsMarkup}</td>
+      </tr>
+    `;
   });
 });

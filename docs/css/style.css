@@ -1,5 +1,6 @@
 body {
   background: black;
+  font-family: courier;
   text-align: center;
   margin-top: 32px;
 }
@@ -9,14 +10,32 @@ input[type=text] {
   background: black;
   border: 0;
   font: normal 30px courier;
-  text-align: center;
   outline: none;
+  width: 100vw;
+  text-align: center;
+}
+
+table.center {
+  margin: 0 auto;
+}
+
+#output td {
+  font-size: 16px;
+  padding-left: 1rem;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+
+.char {
+  color: gray;
+}
+
+.dec {
+  color: darkorchid;
 }
 
 .octet {
   color: lime;
-  font: bold 22px courier;
-  -webkit-font-smoothing: antialiased;
   margin-left: .4rem;
 }
 
