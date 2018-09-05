@@ -97,22 +97,20 @@ function main() {
             return [binary.join('')];
         }
 
-        var bitsToFitInTheFirstOctet = binary.length % 6;
-        var freeSlotsInFirstOctet = 8 - octetHeaders[0].length;
+        do {
+            // Start with the last/rightmost octet and work towards the first/leftmost
+            var header = octetHeaders.pop();
+            var payloadCapacity = 8 - header.length;
 
-        if (freeSlotsInFirstOctet > bitsToFitInTheFirstOctet) {
-            for (var i = 0; i < freeSlotsInFirstOctet - bitsToFitInTheFirstOctet; i++)
-                binary = [0].concat(binary);
-        }
+            if (payloadCapacity > binary.length) {
+                // Pad payload with zeros to fill up all free space
+                while (binary.length < payloadCapacity) {
+                    binary.unshift(0);
+                }
+            }
 
-        var cursor = 0;
-        var length = 0;
-
-        octetHeaders.forEach(function(header, i) {
-            length = 8 - header.length;
-            octets.push(header.concat(binary.slice(cursor, cursor + length)).join(''));
-            cursor = cursor + length;
-        });
+            octets.unshift(header.concat(binary.splice(payloadCapacity * -1, payloadCapacity)).join(''));
+        } while(octetHeaders.length);
 
         return octets;
     };
