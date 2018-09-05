@@ -1,3 +1,5 @@
+"use strict";
+
 import x from "./codePointToUtf8.js";
 import y from "./octetsToMarkup.js";
 
@@ -7,9 +9,11 @@ var elOutput = document.getElementById("output");
 elInput.addEventListener("input", e => {
   elOutput.innerHTML = "";
 
-  e.target.value.split("").forEach(char => {
-    var codePoint = char.codePointAt(0);
-    var utf8OctetsMarkup = y(x(codePoint));
+  var text = e.target.value;
+
+  for(var char of text) {
+    let codePoint = char.codePointAt(0);
+    let utf8OctetsMarkup = y(x(codePoint));
 
     elOutput.innerHTML =
     `
@@ -20,5 +24,5 @@ elInput.addEventListener("input", e => {
         <td>${utf8OctetsMarkup}</td>
       </tr>
     `;
-  });
+  }
 });
