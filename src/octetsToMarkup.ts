@@ -1,7 +1,13 @@
-function decapitate(octet) {
+interface DecapitatedOctet {
+  head: string,
+  insignificant: string,
+  significant: string
+}
+
+function decapitate(octet: string): DecapitatedOctet {
   if (octet[0] === "0") {
     // Single octet code-point (i.e. no header)
-    var indexOfFirstSignificantBit = octet.indexOf(1);
+    var indexOfFirstSignificantBit = octet.indexOf("1");
 
     return {
       head: null,
@@ -10,18 +16,19 @@ function decapitate(octet) {
     };
   }
 
-  var indexOfHeaderDelimiter = octet.indexOf(0);
+  var indexOfHeaderDelimiter = octet.indexOf("0");
 
-  if (indexOfHeaderDelimiter === "1") {
-    //
+  if (indexOfHeaderDelimiter === 1) {
+    // For trailing octets, all bits following the header are significant
     return {
       head: octet.slice(0, indexOfHeaderDelimiter + 1),
+      insignificant: null,
       significant: octet.slice(indexOfHeaderDelimiter + 1),
     };
   }
 
   // First octet in a multiple octet code-point
-  indexOfFirstSignificantBit = octet.indexOf(1, indexOfHeaderDelimiter);
+  indexOfFirstSignificantBit = octet.indexOf("1", indexOfHeaderDelimiter);
 
   var insignificant = indexOfFirstSignificantBit === indexOfHeaderDelimiter + 1
     ? null
@@ -34,7 +41,7 @@ function decapitate(octet) {
   };
 }
 
-function applyTemplate({head, insignificant, significant}) {
+function applyTemplate({head, insignificant, significant}: DecapitatedOctet): string {
   var x = ['<span class="octet">'];
 
   if (head)
@@ -49,11 +56,11 @@ function applyTemplate({head, insignificant, significant}) {
   return x.join("");
 }
 
-var octetsToMarkup = function(octets) {
+var octetsToMarkup = function(octets: string[]): string {
   return octets.reduce((acc, octet) => {
       acc.push(applyTemplate(decapitate(octet)));
       return acc;
   }, []).join("");
 };
 
-exports.main = octetsToMarkup;
+export default octetsToMarkup;

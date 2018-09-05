@@ -1,9 +1,9 @@
-exports.main = main();
+export default main();
 
 function main() {
     // utf-8 can use up to 31 bits to represent a code point
     // create array of the 31 exponents -> [2147483648, 1073741824 ... 8, 4, 2, 1]
-    var power = (function(seed) {
+    var power = (function(seed: number): number[] {
         var pow = [];
         for (var i = 0; i < 32; i++) {
             pow.push(seed);
@@ -16,7 +16,7 @@ function main() {
     * Returns an array of the binary representation of the codePoint
     * Example: 65 -> [0, 1, 0, 0, 0, 0, 0, 1]
     */
-    var _toBinary = function(codePoint) {
+    var _toBinary = function(codePoint: number): number[] {
         var binary = [];
 
         power.forEach(function(b) {
@@ -45,8 +45,8 @@ function main() {
     * Prepares octets by adding their headers and returns them in an array
     * Example: [[1, 1, 0], [1, 0]] for a 2-byte sequence
     */
-    var _prepareOctets = function(codePoint) {
-        var octets = [];
+    var _prepareOctetHeaders = function(codePoint: number): Array<number[]> {
+        var octets:Array<number[]> = [];
         var numberOfOctets = 0;
 
         if (codePoint < 128)
@@ -67,7 +67,7 @@ function main() {
             return octets;
         }
 
-        var firstOctet = [];
+        var firstOctet:number[] = [];
 
         for(var i = 0; i < numberOfOctets; i++)
             firstOctet.push(1);
@@ -85,20 +85,20 @@ function main() {
     };
 
     /**
-    * Returns an array of strings of the binary utf8 representation of the code point;
+    * Returns an array of strings of the binary utf-8 representation of the code point;
     * Example: 162 -> ["11000010", "10100010"]
     */
-    var toUtf8Octets = function (codePoint) {
+    var toUtf8Octets = function (codePoint: number): string[] {
         var binary = _toBinary(codePoint);
-        var octets = _prepareOctets(codePoint);
+        var octetHeaders = _prepareOctetHeaders(codePoint);
+        var octets = [];
 
-        if (octets.length == 1) {
-            octets[0] = binary.join('');
-            return octets;
+        if (octetHeaders.length == 1) {
+            return [binary.join('')];
         }
 
-        var bitsToFitInTheFirstOctet = binary.length % 6,
-            freeSlotsInFirstOctet = 8 - octets[0].length;
+        var bitsToFitInTheFirstOctet = binary.length % 6;
+        var freeSlotsInFirstOctet = 8 - octetHeaders[0].length;
 
         if (freeSlotsInFirstOctet > bitsToFitInTheFirstOctet) {
             for (var i = 0; i < freeSlotsInFirstOctet - bitsToFitInTheFirstOctet; i++)
@@ -108,9 +108,9 @@ function main() {
         var cursor = 0;
         var length = 0;
 
-        octets.forEach(function(oct, i) {
-            length = 8 - oct.length;
-            octets[i] = oct.concat(binary.slice(cursor, cursor + length)).join('');
+        octetHeaders.forEach(function(header, i) {
+            length = 8 - header.length;
+            octets.push(header.concat(binary.slice(cursor, cursor + length)).join(''));
             cursor = cursor + length;
         });
 
