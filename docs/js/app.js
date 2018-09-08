@@ -1,7 +1,7 @@
 "use strict";
 
-import x from "./codePointToUtf8.js";
-import y from "./octetsToMarkup.js";
+import codePointToUtf8 from "./codePointToUtf8.js";
+import octetsToMarkup from "./octetsToMarkup.js";
 
 var elInput = document.getElementById("txtInput");
 var elOutput = document.getElementById("output");
@@ -13,7 +13,7 @@ elInput.addEventListener("input", e => {
 
   for(var char of text) {
     let codePoint = char.codePointAt(0);
-    let utf8OctetsMarkup = y(x(codePoint));
+    let utf8OctetsMarkup = octetsToMarkup(codePointToUtf8(codePoint));
 
     elOutput.innerHTML =
     `
