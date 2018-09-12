@@ -2,7 +2,7 @@ body {
   background: black;
   font-family: courier;
   text-align: center;
-  margin-top: 32px;
+  margin: 32px 0;
 }
 
 input[type=text] {
@@ -19,9 +19,21 @@ table.center {
   margin: 0 auto;
 }
 
+th {
+  color: gray;
+  font-size: 12px;
+  font-weight: normal;
+  padding-right: 1ch;
+  text-align: left;
+}
+
+.hide {
+  display: none;
+}
+
 #output td {
   font-size: 16px;
-  padding-left: 1rem;
+  padding-right: 1ch;
   text-align: left;
   -webkit-font-smoothing: antialiased;
 }
@@ -43,8 +55,8 @@ table.center {
   margin-left: 0;
 }
 
-.header {
-  color: gray;
+.octet .header {
+  color: rgba(255, 255, 255, .4);
 }
 
 .insignificant {

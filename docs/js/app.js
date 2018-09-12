@@ -4,6 +4,7 @@ import codePointToUtf8 from "./codePointToUtf8.js";
 import octetsToMarkup from "./octetsToMarkup.js";
 
 var elInput = document.getElementById("txtInput");
+var elHeaders = document.getElementById("headers");
 var elOutput = document.getElementById("output");
 
 elInput.addEventListener("input", e => {
@@ -12,19 +13,21 @@ elInput.addEventListener("input", e => {
   var text = e.target.value;
   window.location.hash = encodeURI(text);
 
+  text.length
+    ? elHeaders.classList.remove("hide")
+    : elHeaders.classList.add("hide");
+
   for(var char of text) {
     let codePoint = char.codePointAt(0);
     let utf8OctetsMarkup = octetsToMarkup(codePointToUtf8(codePoint));
 
     elOutput.innerHTML =
-    `
-      ${elOutput.innerHTML}
+    `${elOutput.innerHTML}
       <tr>
         <td class="char">${char}</td>
         <td class="dec">${codePoint}</td>
         <td>${utf8OctetsMarkup}</td>
-      </tr>
-    `;
+      </tr>`;
   }
 });
 
