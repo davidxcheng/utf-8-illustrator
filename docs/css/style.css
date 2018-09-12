@@ -25,6 +25,7 @@ th {
   font-weight: normal;
   padding-right: 1ch;
   text-align: left;
+  white-space: nowrap;
 }
 
 .hide {
@@ -44,6 +45,11 @@ th {
 
 .dec {
   color: darkorchid;
+}
+
+.hex {
+  color: darkgreen;
+  white-space: nowrap;
 }
 
 .octet {

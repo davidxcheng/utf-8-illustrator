@@ -2,6 +2,7 @@
 
 import codePointToUtf8 from "./codePointToUtf8.js";
 import octetsToMarkup from "./octetsToMarkup.js";
+import octetsToHex from "./octetsToHex.js";
 
 var elInput = document.getElementById("txtInput");
 var elHeaders = document.getElementById("headers");
@@ -19,7 +20,9 @@ elInput.addEventListener("input", e => {
 
   for(var char of text) {
     let codePoint = char.codePointAt(0);
-    let utf8OctetsMarkup = octetsToMarkup(codePointToUtf8(codePoint));
+    let octets = codePointToUtf8(codePoint);
+    let utf8OctetsMarkup = octetsToMarkup(octets);
+    let utf8Hex = octetsToHex(octets)
 
     elOutput.innerHTML =
     `${elOutput.innerHTML}
@@ -27,6 +30,7 @@ elInput.addEventListener("input", e => {
         <td class="char">${char}</td>
         <td class="dec">${codePoint}</td>
         <td>${utf8OctetsMarkup}</td>
+        <td class="hex">${utf8Hex}</td>
       </tr>`;
   }
 });
