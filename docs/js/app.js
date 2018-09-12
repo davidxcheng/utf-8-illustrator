@@ -36,14 +36,12 @@ elInput.addEventListener("input", e => {
 });
 
 window.addEventListener("load", () => {
-  if (window.location.hash.length) {
-    // Use location.hash as input..
-    elInput.value = decodeURI(window.location.hash.slice(1));
+  elInput.value = window.location.hash.length
+    ? decodeURI(window.location.hash.slice(1))
+    : decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
 
-    // ..and trigger the input event
-    var evt = document.createEvent("HTMLEvents");
-
-    evt.initEvent("input", false, true);
-    txtInput.dispatchEvent(evt);
-  }
+  // Trigger the input event
+  var evt = document.createEvent("HTMLEvents");
+  evt.initEvent("input", false, true);
+  txtInput.dispatchEvent(evt);
 });
