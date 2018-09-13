@@ -48,6 +48,10 @@ th {
   color: darkorchid;
 }
 
+.bin {
+  color: lime;
+}
+
 .hex {
   color: darkgreen;
   white-space: nowrap;
@@ -72,10 +76,11 @@ th {
 }
 
 #legend {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  background: transparent;
   padding: 4px;
   font-size: 12px;
 }

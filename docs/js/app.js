@@ -25,6 +25,7 @@ elInput.addEventListener("input", e => {
 
   for(var char of text) {
     let codePoint = char.codePointAt(0);
+    let bin = codePoint.toString(2);
     let octets = codePointToUtf8(codePoint);
     let utf8OctetsMarkup = octetsToMarkup(octets);
     let utf8Hex = octetsToHex(octets)
@@ -34,6 +35,7 @@ elInput.addEventListener("input", e => {
       <tr>
         <td class="char">${char}</td>
         <td class="dec">${codePoint}</td>
+        <td class="bin">${bin}</td>
         <td>${utf8OctetsMarkup}</td>
         <td class="hex">${utf8Hex}</td>
       </tr>`;
