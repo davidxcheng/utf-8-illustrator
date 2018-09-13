@@ -2,7 +2,8 @@ body {
   background: black;
   font-family: courier;
   text-align: center;
-  margin: 32px 0;
+  margin: 24px 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 input[type=text] {
@@ -16,7 +17,7 @@ input[type=text] {
 }
 
 table.center {
-  margin: 0 auto;
+  margin: 8px auto;
 }
 
 th {
@@ -26,6 +27,7 @@ th {
   padding-right: 1ch;
   text-align: left;
   white-space: nowrap;
+  word-spacing: -.5ch;
 }
 
 .hide {
@@ -36,7 +38,6 @@ th {
   font-size: 16px;
   padding-right: 1ch;
   text-align: left;
-  -webkit-font-smoothing: antialiased;
 }
 
 .char {
@@ -50,6 +51,7 @@ th {
 .hex {
   color: darkgreen;
   white-space: nowrap;
+  word-spacing: -.5ch;
 }
 
 .octet {
@@ -61,10 +63,25 @@ th {
   margin-left: 0;
 }
 
-.octet .header {
+.header {
   color: rgba(255, 255, 255, .4);
 }
 
 .insignificant {
   opacity: .5;
+}
+
+#legend {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px;
+  font-size: 12px;
+}
+
+#legend > span {
+  margin: 0 4px;
+  white-space: nowrap;
+  word-spacing: -.5ch;
 }
