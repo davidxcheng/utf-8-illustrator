@@ -9,6 +9,23 @@ var elHeaders = document.getElementById("headers");
 var elOutput = document.getElementById("output");
 var elLegend = document.getElementById("legend");
 
+var unicodeCodePointEscapeRegEx = /\\u\{[A-Fa-f0-9]{1,6}\}/;
+
+function createOutputFor(char, codePoint) {
+  let bin = codePoint.toString(2);
+  let octets = codePointToUtf8(codePoint);
+  let utf8OctetsMarkup = octetsToMarkup(octets);
+  let utf8Hex = octetsToHex(octets);
+
+  return `<tr>
+      <td class="char">${char}</td>
+      <td class="dec">${codePoint}</td>
+      <td class="bin">${bin}</td>
+      <td>${utf8OctetsMarkup}</td>
+      <td class="hex">${utf8Hex}</td>
+    </tr>`;
+}
+
 elInput.addEventListener("input", e => {
   elOutput.innerHTML = "";
 
@@ -23,22 +40,18 @@ elInput.addEventListener("input", e => {
     elLegend.classList.remove("hide");
   }
 
+  if (unicodeCodePointEscapeRegEx.test(text)) {
+    // User input is Unicode code point escape (i.e. \u{FEFF}).
+    // Abort normal flow and just show that char
+    let hex = text.slice(3, -1);
+    let codePoint = parseInt(hex, 16);
+    elOutput.innerHTML = createOutputFor(`&#x${hex}`, codePoint);
+    return;
+  }
+
   for(var char of text) {
     let codePoint = char.codePointAt(0);
-    let bin = codePoint.toString(2);
-    let octets = codePointToUtf8(codePoint);
-    let utf8OctetsMarkup = octetsToMarkup(octets);
-    let utf8Hex = octetsToHex(octets)
-
-    elOutput.innerHTML =
-    `${elOutput.innerHTML}
-      <tr>
-        <td class="char">${char}</td>
-        <td class="dec">${codePoint}</td>
-        <td class="bin">${bin}</td>
-        <td>${utf8OctetsMarkup}</td>
-        <td class="hex">${utf8Hex}</td>
-      </tr>`;
+    elOutput.innerHTML = `${elOutput.innerHTML}${createOutputFor(char, codePoint)}`;
   }
 });
 
