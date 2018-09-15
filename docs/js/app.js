@@ -11,7 +11,7 @@ var elLegend = document.getElementById("legend");
 
 var unicodeCodePointEscapeRegEx = /\\u\{[A-Fa-f0-9]{1,6}\}/;
 
-function createOutputFor(char, codePoint) {
+function createMarkup(char, codePoint) {
   let bin = codePoint.toString(2);
   let octets = codePointToUtf8(codePoint);
   let utf8OctetsMarkup = octetsToMarkup(octets);
@@ -27,8 +27,6 @@ function createOutputFor(char, codePoint) {
 }
 
 elInput.addEventListener("input", e => {
-  elOutput.innerHTML = "";
-
   var text = e.target.value;
   window.location.hash = encodeURI(text);
 
@@ -45,14 +43,18 @@ elInput.addEventListener("input", e => {
     // Abort normal flow and just show that char
     let hex = text.slice(3, -1);
     let codePoint = parseInt(hex, 16);
-    elOutput.innerHTML = createOutputFor(`&#x${hex}`, codePoint);
+    elOutput.innerHTML = createMarkup(`&#x${hex}`, codePoint);
     return;
   }
 
+  let ouputMarkup = "";
+
   for(var char of text) {
     let codePoint = char.codePointAt(0);
-    elOutput.innerHTML = `${elOutput.innerHTML}${createOutputFor(char, codePoint)}`;
+    ouputMarkup += createMarkup(char, codePoint);
   }
+
+  elOutput.innerHTML = ouputMarkup;
 });
 
 window.addEventListener("load", () => {
