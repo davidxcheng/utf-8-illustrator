@@ -9,7 +9,7 @@ var elHeaders = document.getElementById("headers");
 var elOutput = document.getElementById("output");
 var elLegend = document.getElementById("legend");
 
-var unicodeCodePointEscapeRegEx = /\\u\{[A-Fa-f0-9]{1,6}\}/;
+var unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 
 function createMarkup(char, codePoint) {
   let bin = codePoint.toString(2);
@@ -44,6 +44,7 @@ elInput.addEventListener("input", e => {
     let hex = text.slice(3, -1);
     let codePoint = parseInt(hex, 16);
     elOutput.innerHTML = createMarkup(`&#x${hex}`, codePoint);
+
     return;
   }
 
