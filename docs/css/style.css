@@ -75,7 +75,7 @@ th {
   opacity: .5;
 }
 
-#legend {
+.footer {
   position: fixed;
   bottom: 0;
   left: 0;
