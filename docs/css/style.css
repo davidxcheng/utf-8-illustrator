@@ -99,3 +99,12 @@ th {
 #hintput {
   cursor: pointer;
 }
+
+.learn-more {
+  color: lime;
+  text-decoration: none;
+}
+
+.learn-more > sub {
+  vertical-align: middle;
+}
