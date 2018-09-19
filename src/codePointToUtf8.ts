@@ -1,44 +1,14 @@
+/// <reference lib="es2017.string" />
+
 export default main();
 
 function main() {
-    // utf-8 can use up to 31 bits to represent a code point
-    // create array of the 31 exponents -> [2147483648, 1073741824 ... 8, 4, 2, 1]
-    var power = (function(seed: number): number[] {
-        var pow = [];
-        for (var i = 0; i < 32; i++) {
-            pow.push(seed);
-            seed = seed * 2;
-        }
-        return pow.reverse();
-    })(1);
-
     /**
     * Returns an array of the binary representation of the codePoint
     * Example: 65 -> [0, 1, 0, 0, 0, 0, 0, 1]
     */
     var _toBinary = function(codePoint: number): number[] {
-        var binary = [];
-
-        power.forEach(function(b) {
-            if (codePoint >= b) {
-                binary.push(1);
-                codePoint = codePoint - b;
-            } else {
-                if (binary.length)
-                    // only push significant zeros
-                    binary.push(0);
-            }
-        });
-
-        if (binary.length < 8) {
-            // pad with zeros to make it at least 8 bits long
-            // this simplifies logic for 1-byte sequences (0xxxxxxx)
-            var length = 8 - binary.length;
-            for (var i = 0; i < length; i++)
-                binary = [0].concat(binary);
-        }
-
-        return binary;
+        return codePoint.toString(2).padStart(8, "0").split("").map(bit => parseInt(bit, 10));
     };
 
     /**
