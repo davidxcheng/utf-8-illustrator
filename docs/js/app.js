@@ -8,6 +8,7 @@ var elInput = document.getElementById("txtInput");
 var elHeaders = document.getElementById("headers");
 var elOutput = document.getElementById("output");
 var elLegend = document.getElementById("legend");
+var elHintput = document.getElementById("hintput");
 
 var unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 
@@ -18,7 +19,7 @@ function createMarkup(char, codePoint) {
   let utf8Hex = octetsToHex(octets);
 
   return `<tr>
-      <td class="char">${char}</td>
+      <td class="glyph">${char}</td>
       <td class="dec">${codePoint}</td>
       <td class="bin">${bin}</td>
       <td>${utf8OctetsMarkup}</td>
@@ -58,14 +59,23 @@ elInput.addEventListener("input", e => {
   elOutput.innerHTML = ouputMarkup;
 });
 
+function triggerInputEvent() {
+  var evt = document.createEvent("HTMLEvents");
+  evt.initEvent("input", false, true);
+  txtInput.dispatchEvent(evt);
+}
+
 window.addEventListener("load", () => {
   elInput.value = window.location.hash.length
     ? decodeURI(window.location.hash.slice(1))
     // Default input (x, o, snowman, carrot)
     : decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
 
-  // Trigger the input event
-  var evt = document.createEvent("HTMLEvents");
-  evt.initEvent("input", false, true);
-  txtInput.dispatchEvent(evt);
+  triggerInputEvent();
+});
+
+elHintput.addEventListener("click", (e) => {
+  elInput.value = e.target.innerText;
+  elInput.focus();
+  triggerInputEvent();
 });

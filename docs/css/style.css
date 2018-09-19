@@ -40,7 +40,7 @@ th {
   text-align: left;
 }
 
-.char {
+.glyph {
   color: gray;
 }
 
@@ -89,4 +89,13 @@ th {
   margin: 0 4px;
   white-space: nowrap;
   word-spacing: -.5ch;
+}
+
+.hint {
+  color: ghostwhite;
+  padding: 4px;
+}
+
+#hintput {
+  cursor: pointer;
 }
