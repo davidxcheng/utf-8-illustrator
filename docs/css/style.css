@@ -54,6 +54,7 @@ th {
 
 .hex {
   color: darkgreen;
+  text-transform: uppercase;
   white-space: nowrap;
   word-spacing: -.5ch;
 }

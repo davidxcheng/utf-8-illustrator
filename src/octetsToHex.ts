@@ -3,7 +3,7 @@ function octetsToHex(octets: string[]) : string {
 
   octets.forEach(octet => hexNumbers.push(parseInt(octet, 2).toString(16)));
 
-  return hexNumbers.join(" ").toUpperCase();
+  return hexNumbers.join(" ");
 }
 
 export default octetsToHex;

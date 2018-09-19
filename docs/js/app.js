@@ -14,6 +14,7 @@ var unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 
 function createMarkup(char, codePoint) {
   let bin = codePoint.toString(2);
+  let hex = codePoint.toString(16);
   let octets = codePointToUtf8(codePoint);
   let utf8OctetsMarkup = octetsToMarkup(octets);
   let utf8Hex = octetsToHex(octets);
@@ -21,6 +22,7 @@ function createMarkup(char, codePoint) {
   return `<tr>
       <td class="glyph">${char}</td>
       <td class="dec">${codePoint}</td>
+      <td class="hex">${hex}</td>
       <td class="bin">${bin}</td>
       <td>${utf8OctetsMarkup}</td>
       <td class="hex">${utf8Hex}</td>
