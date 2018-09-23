@@ -1,6 +1,6 @@
 # The UTF-8 Illustrator
 
-![image](https://user-images.githubusercontent.com/452261/45784288-71670e00-bc68-11e8-97e5-94482b68de56.png)
+![image](demo.gif)
 
 
 Online tool where you can type chars (or emoji) and see what it looks like when utf-8 encoded.
