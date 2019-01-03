@@ -29,10 +29,7 @@ function createMarkup(char, codePoint) {
     </tr>`;
 }
 
-elInput.addEventListener("input", e => {
-  var text = e.target.value;
-  window.location.hash = encodeURI(text);
-
+function render(text) {
   if (text.length === 0) {
     elHeaders.classList.add("hide");
     elLegend.classList.add("hide");
@@ -59,25 +56,35 @@ elInput.addEventListener("input", e => {
   }
 
   elOutput.innerHTML = ouputMarkup;
-});
-
-function triggerInputEvent() {
-  var evt = document.createEvent("HTMLEvents");
-  evt.initEvent("input", false, true);
-  txtInput.dispatchEvent(evt);
 }
 
-window.addEventListener("load", () => {
-  elInput.value = window.location.hash.length
-    ? decodeURI(window.location.hash.slice(1))
-    // Default input (x, o, snowman, carrot)
-    : decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
+elInput.addEventListener("input", e => {
+  var text = e.target.value;
+  window.history.pushState({ text }, "Input", `#${text}`);
+  render(text);
+});
 
-  triggerInputEvent();
+window.addEventListener("load", () => {
+  var text = window.location.hash.length
+  ? decodeURI(window.location.hash.slice(1))
+  // Default input (x, o, snowman, carrot)
+  : decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
+
+  window.history.pushState({ text }, "Input", `#${text}`);
+  elInput.value = text;
+  render(text);
+});
+
+window.addEventListener("popstate", e => {
+  if (e.state) {
+    elInput.value = e.state.text;
+    elInput.focus();
+    render(e.state.text);
+  }
 });
 
 elHintput.addEventListener("click", (e) => {
   elInput.value = e.target.innerText;
   elInput.focus();
-  triggerInputEvent();
+  render(e.target.innerText);
 });
