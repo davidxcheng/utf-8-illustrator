@@ -53,7 +53,7 @@ th {
 }
 
 .hex {
-  color: darkgreen;
+  color: cyan;
   text-transform: uppercase;
   white-space: nowrap;
   word-spacing: -.5ch;
