@@ -4,6 +4,7 @@ import codePointToUtf8 from "./codePointToUtf8.js";
 import octetsToMarkup from "./octetsToMarkup.js";
 import octetsToHex from "./octetsToHex.js";
 
+var elForm = document.getElementById("frmInput");
 var elInput = document.getElementById("txtInput");
 var elHeaders = document.getElementById("headers");
 var elOutput = document.getElementById("output");
@@ -63,6 +64,9 @@ elInput.addEventListener("input", e => {
   window.history.pushState({ text }, "Input", `#${text}`);
   render(text);
 });
+
+// Submitting the form causes a '?' to be added to the url
+elForm.addEventListener("submit", e => e.preventDefault());
 
 window.addEventListener("load", () => {
   var text = window.location.hash.length
