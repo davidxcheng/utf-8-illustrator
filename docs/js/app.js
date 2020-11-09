@@ -69,10 +69,17 @@ elInput.addEventListener("input", e => {
 elForm.addEventListener("submit", e => e.preventDefault());
 
 window.addEventListener("load", () => {
-  var text = window.location.hash.length
-  ? decodeURI(window.location.hash.slice(1))
   // Default input (x, o, snowman, carrot)
-  : decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
+  var text = decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
+
+  if (window.location.hash.length) {
+    try {
+      text = decodeURI(window.location.hash.slice(1));
+    } catch (error) {
+      // Best effort: just show what's in the hash
+      text = window.location.hash.slice(1);
+    }
+  }
 
   window.history.pushState({ text }, "Input", `#${text}`);
   elInput.value = text;
