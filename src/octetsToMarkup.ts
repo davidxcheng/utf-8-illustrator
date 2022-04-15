@@ -16,7 +16,7 @@ function decapitate(octet: string, firstSignificantBitLocated: boolean): Decapit
     };
   }
 
-  var indexOfHeaderDelimiter = octet.indexOf("0");
+  var indexOfHeaderDelimiter: number = octet.indexOf("0");
 
   if (indexOfHeaderDelimiter === 1 && firstSignificantBitLocated) {
     // Trailing octets all begin with "10"
@@ -30,7 +30,7 @@ function decapitate(octet: string, firstSignificantBitLocated: boolean): Decapit
   // First octet in a multiple octet code-point
   indexOfFirstSignificantBit = octet.indexOf("1", indexOfHeaderDelimiter);
 
-  var insignificant = null;
+  var insignificant: string = null;
 
   if (indexOfFirstSignificantBit === -1) {
     // All payload bits are insignificant
@@ -40,7 +40,7 @@ function decapitate(octet: string, firstSignificantBitLocated: boolean): Decapit
     insignificant = octet.slice(indexOfHeaderDelimiter + 1, indexOfFirstSignificantBit);
   }
 
-  var significant = indexOfFirstSignificantBit === -1
+  var significant: string = indexOfFirstSignificantBit === -1
     ? null
     : octet.slice(indexOfFirstSignificantBit);
 
@@ -52,24 +52,24 @@ function decapitate(octet: string, firstSignificantBitLocated: boolean): Decapit
 }
 
 function applyTemplate({head, insignificant, significant}: DecapitatedOctet): string {
-  var x = ['<span class="octet">'];
+  var markup: string[] = ['<span class="octet">'];
 
   if (head)
-    x.push(`<b class="header">${head}</b>`);
+    markup.push(`<b class="header">${head}</b>`);
 
   if (insignificant)
-    x.push(`<b class="insignificant">${insignificant}</b>`);
+    markup.push(`<b class="insignificant">${insignificant}</b>`);
 
   if (significant)
-    x.push(`<b class="significant">${significant}</b>`);
+    markup.push(`<b class="significant">${significant}</b>`);
 
-  x.push("</span>");
+  markup.push("</span>");
 
-  return x.join("");
+  return markup.join("");
 }
 
 var octetsToMarkup = function(octets: string[]): string {
-  var firstSignificantBitLocated = false;
+  var firstSignificantBitLocated: boolean = false;
   return octets.reduce((acc, octet) => {
       var decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
 

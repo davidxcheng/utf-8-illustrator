@@ -6,7 +6,11 @@ function main() {
     * Example: 65 -> [0, 1, 0, 0, 0, 0, 0, 1]
     */
     var _toBinary = function (codePoint) {
-        return codePoint.toString(2).padStart(8, "0").split("").map(bit => parseInt(bit, 10));
+        return codePoint
+            .toString(2)
+            .padStart(8, "0")
+            .split("")
+            .map(bit => parseInt(bit, 10));
     };
     /**
     * Prepares octets by adding their headers and returns them in an array

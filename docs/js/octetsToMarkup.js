@@ -38,15 +38,15 @@ function decapitate(octet, firstSignificantBitLocated) {
     };
 }
 function applyTemplate({ head, insignificant, significant }) {
-    var x = ['<span class="octet">'];
+    var markup = ['<span class="octet">'];
     if (head)
-        x.push(`<b class="header">${head}</b>`);
+        markup.push(`<b class="header">${head}</b>`);
     if (insignificant)
-        x.push(`<b class="insignificant">${insignificant}</b>`);
+        markup.push(`<b class="insignificant">${insignificant}</b>`);
     if (significant)
-        x.push(`<b class="significant">${significant}</b>`);
-    x.push("</span>");
-    return x.join("");
+        markup.push(`<b class="significant">${significant}</b>`);
+    markup.push("</span>");
+    return markup.join("");
 }
 var octetsToMarkup = function (octets) {
     var firstSignificantBitLocated = false;

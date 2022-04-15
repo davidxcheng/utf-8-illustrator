@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "module": "es6",
-    "target": "es2016"
+    "target": "es2016",
+    "outDir": "./docs/js/",
+    "noImplicitAny": true,
   },
   "include": [
     "src/*.ts"
