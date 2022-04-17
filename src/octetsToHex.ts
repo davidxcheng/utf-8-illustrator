@@ -1,5 +1,5 @@
 function octetsToHex(octets: string[]) : string {
-  var hexNumbers: string[] = [];
+  const hexNumbers: string[] = [];
 
   octets.forEach(octet => hexNumbers.push(parseInt(octet, 2).toString(16)));
 

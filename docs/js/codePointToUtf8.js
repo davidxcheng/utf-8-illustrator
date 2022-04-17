@@ -5,7 +5,7 @@ function main() {
     * Returns an array of the binary representation of the codePoint
     * Example: 65 -> [0, 1, 0, 0, 0, 0, 0, 1]
     */
-    var _toBinary = function (codePoint) {
+    const _toBinary = function (codePoint) {
         return codePoint
             .toString(2)
             .padStart(8, "0")
@@ -16,9 +16,9 @@ function main() {
     * Prepares octets by adding their headers and returns them in an array
     * Example: [[1, 1, 0], [1, 0]] for a 2-byte sequence
     */
-    var _prepareOctetHeaders = function (codePoint) {
-        var octets = [];
-        var numberOfOctets = 0;
+    const _prepareOctetHeaders = function (codePoint) {
+        const octets = [];
+        let numberOfOctets = 0;
         if (codePoint < 128)
             numberOfOctets = 1;
         else if (codePoint < 2048)
@@ -35,14 +35,14 @@ function main() {
             octets.push([]);
             return octets;
         }
-        var firstOctet = [];
-        for (var i = 0; i < numberOfOctets; i++)
+        const firstOctet = [];
+        for (let i = 0; i < numberOfOctets; i++)
             firstOctet.push(1);
         firstOctet.push(0);
         // 110xxxxx for a 2-byte sequence
         // 1110xxxx for a 3-byte sequence and so on.
         octets.push(firstOctet);
-        for (var i = 1; i < numberOfOctets; i++)
+        for (let i = 1; i < numberOfOctets; i++)
             // header of subsequent bytes are always 10xxxxxx
             octets.push([1, 0]);
         return octets;
@@ -51,17 +51,17 @@ function main() {
     * Returns an array of strings of the binary utf-8 representation of the code point;
     * Example: 162 -> ["11000010", "10100010"]
     */
-    var toUtf8Octets = function (codePoint) {
-        var binary = _toBinary(codePoint);
-        var octetHeaders = _prepareOctetHeaders(codePoint);
-        var octets = [];
+    const toUtf8Octets = function (codePoint) {
+        const binary = _toBinary(codePoint);
+        const octetHeaders = _prepareOctetHeaders(codePoint);
+        const octets = [];
         if (octetHeaders.length == 1) {
             return [binary.join('')];
         }
         do {
             // Start with the last/rightmost octet and work towards the first/leftmost
-            var header = octetHeaders.pop();
-            var payloadCapacity = 8 - header.length;
+            const header = octetHeaders.pop();
+            const payloadCapacity = 8 - header.length;
             if (payloadCapacity > binary.length) {
                 // Pad payload with zeros to fill up all free space
                 while (binary.length < payloadCapacity) {

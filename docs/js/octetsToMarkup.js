@@ -1,14 +1,14 @@
 function decapitate(octet, firstSignificantBitLocated) {
     if (octet[0] === "0") {
         // Single octet code-point (i.e. no header)
-        var indexOfFirstSignificantBit = octet.indexOf("1");
+        const indexOfFirstSignificantBit = octet.indexOf("1");
         return {
             head: null,
             insignificant: octet.slice(0, indexOfFirstSignificantBit),
             significant: octet.slice(indexOfFirstSignificantBit),
         };
     }
-    var indexOfHeaderDelimiter = octet.indexOf("0");
+    const indexOfHeaderDelimiter = octet.indexOf("0");
     if (indexOfHeaderDelimiter === 1 && firstSignificantBitLocated) {
         // Trailing octets all begin with "10"
         return {
@@ -18,8 +18,8 @@ function decapitate(octet, firstSignificantBitLocated) {
         };
     }
     // First octet in a multiple octet code-point
-    indexOfFirstSignificantBit = octet.indexOf("1", indexOfHeaderDelimiter);
-    var insignificant = null;
+    const indexOfFirstSignificantBit = octet.indexOf("1", indexOfHeaderDelimiter);
+    let insignificant = null;
     if (indexOfFirstSignificantBit === -1) {
         // All payload bits are insignificant
         insignificant = octet.slice(indexOfHeaderDelimiter + 1);
@@ -28,7 +28,7 @@ function decapitate(octet, firstSignificantBitLocated) {
         // Insignificant bits in the payload
         insignificant = octet.slice(indexOfHeaderDelimiter + 1, indexOfFirstSignificantBit);
     }
-    var significant = indexOfFirstSignificantBit === -1
+    let significant = indexOfFirstSignificantBit === -1
         ? null
         : octet.slice(indexOfFirstSignificantBit);
     return {
@@ -38,7 +38,7 @@ function decapitate(octet, firstSignificantBitLocated) {
     };
 }
 function applyTemplate({ head, insignificant, significant }) {
-    var markup = ['<span class="octet">'];
+    const markup = ['<span class="octet">'];
     if (head)
         markup.push(`<b class="header">${head}</b>`);
     if (insignificant)
@@ -48,10 +48,10 @@ function applyTemplate({ head, insignificant, significant }) {
     markup.push("</span>");
     return markup.join("");
 }
-var octetsToMarkup = function (octets) {
-    var firstSignificantBitLocated = false;
+const octetsToMarkup = function (octets) {
+    let firstSignificantBitLocated = false;
     return octets.reduce((acc, octet) => {
-        var decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
+        const decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
         firstSignificantBitLocated = firstSignificantBitLocated || decapitatedOctet.significant != null;
         acc.push(applyTemplate(decapitatedOctet));
         return acc;

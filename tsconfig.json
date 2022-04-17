@@ -3,7 +3,7 @@
     "module": "es6",
     "target": "es2016",
     "outDir": "./docs/js/",
-    "noImplicitAny": true,
+    "strict": true // Includes noImplicitAny
   },
   "include": [
     "src/*.ts"
