@@ -21,7 +21,7 @@ function createMarkup(char: string, codePoint: number): string {
   return `<tr>
       <td class="glyph">${char}</td>
       <td class="dec">${codePoint}</td>
-      <td class="hex">${hex}</td>
+      <td class="hex"><a rel="nofollow noopener noreferrer" href="https://unicode-table.com/en/${hex}/">${hex}</a></td>
       <td class="bin">${bin}</td>
       <td>${utf8OctetsMarkup}</td>
       <td class="hex">${utf8Hex}</td>
