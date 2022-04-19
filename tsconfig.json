@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "es6",
+    "lib": ["ES2020", "DOM"],
     "target": "es2016",
     "outDir": "./docs/js/",
     "strict": true // Includes noImplicitAny

@@ -4,6 +4,17 @@ interface DecapitatedOctet {
   significant: string | null
 }
 
+export default function octetsToMarkup(octets: string[]): string {
+  let firstSignificantBitLocated = false;
+  return octets.reduce((acc: string[], octet) => {
+      const decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
+
+      firstSignificantBitLocated = firstSignificantBitLocated || decapitatedOctet.significant != null;
+      acc.push(applyTemplate(decapitatedOctet));
+      return acc;
+  }, []).join("");
+};
+
 function decapitate(octet: string, firstSignificantBitLocated: boolean): DecapitatedOctet {
   if (octet[0] === "0") {
     // Single octet code-point (i.e. no header)
@@ -67,16 +78,3 @@ function applyTemplate({head, insignificant, significant}: DecapitatedOctet): st
 
   return markup.join("");
 }
-
-const octetsToMarkup = function(octets: string[]): string {
-  let firstSignificantBitLocated = false;
-  return octets.reduce((acc: string[], octet) => {
-      const decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
-
-      firstSignificantBitLocated = firstSignificantBitLocated || decapitatedOctet.significant != null;
-      acc.push(applyTemplate(decapitatedOctet));
-      return acc;
-  }, []).join("");
-};
-
-export default octetsToMarkup;

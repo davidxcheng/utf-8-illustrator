@@ -22,6 +22,6 @@ Shout out to some great resources about utf-8, Unicode, emoji etc:
 To run it on `http://localhost:8000`:
 
 ```
-yarn install
-yarn run dev
+npm install
+npm run dev
 ```

@@ -1,3 +1,13 @@
+export default function octetsToMarkup(octets) {
+    let firstSignificantBitLocated = false;
+    return octets.reduce((acc, octet) => {
+        const decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
+        firstSignificantBitLocated = firstSignificantBitLocated || decapitatedOctet.significant != null;
+        acc.push(applyTemplate(decapitatedOctet));
+        return acc;
+    }, []).join("");
+}
+;
 function decapitate(octet, firstSignificantBitLocated) {
     if (octet[0] === "0") {
         // Single octet code-point (i.e. no header)
@@ -48,13 +58,3 @@ function applyTemplate({ head, insignificant, significant }) {
     markup.push("</span>");
     return markup.join("");
 }
-const octetsToMarkup = function (octets) {
-    let firstSignificantBitLocated = false;
-    return octets.reduce((acc, octet) => {
-        const decapitatedOctet = decapitate(octet, firstSignificantBitLocated);
-        firstSignificantBitLocated = firstSignificantBitLocated || decapitatedOctet.significant != null;
-        acc.push(applyTemplate(decapitatedOctet));
-        return acc;
-    }, []).join("");
-};
-export default octetsToMarkup;
