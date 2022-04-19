@@ -55,8 +55,7 @@ elInput.addEventListener("input", (e) => {
 // Submitting the form causes a '?' to be added to the url
 elForm.addEventListener("submit", e => e.preventDefault());
 window.addEventListener("load", () => {
-    // Default input (x, o, snowman, carrot)
-    let text = decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
+    let text = "";
     if (window.location.hash.length) {
         try {
             text = decodeURI(window.location.hash.slice(1));
@@ -65,6 +64,10 @@ window.addEventListener("load", () => {
             // Best effort: just show what's in the hash
             text = window.location.hash.slice(1);
         }
+    }
+    else {
+        // Default input (x, o, snowman, carrot)
+        text = decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
     }
     window.history.pushState({ text }, "Input", `#${text}`);
     elInput.value = text;
@@ -78,7 +81,9 @@ window.addEventListener("popstate", (e) => {
     }
 });
 elHintput.addEventListener("click", (e) => {
-    elInput.value = e.target.innerText;
+    const escapedHexString = e.target.innerText;
+    elInput.value = escapedHexString;
+    window.history.pushState({ text: escapedHexString }, "Input", `#${escapedHexString}`);
     elInput.focus();
-    render(e.target.innerText);
+    render(escapedHexString);
 });

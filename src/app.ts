@@ -67,8 +67,7 @@ elInput.addEventListener("input", (e: Event) => {
 elForm.addEventListener("submit", e => e.preventDefault());
 
 window.addEventListener("load", () => {
-  // Default input (x, o, snowman, carrot)
-  let text = decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
+  let text = "";
 
   if (window.location.hash.length) {
     try {
@@ -77,6 +76,9 @@ window.addEventListener("load", () => {
       // Best effort: just show what's in the hash
       text = window.location.hash.slice(1);
     }
+  } else {
+    // Default input (x, o, snowman, carrot)
+    text = decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
   }
 
   window.history.pushState({ text }, "Input", `#${text}`);
@@ -93,7 +95,11 @@ window.addEventListener("popstate", (e: PopStateEvent) => {
 });
 
 elHintput.addEventListener("click", (e: Event) => {
-  elInput.value = (<HTMLElement>e.target).innerText;
+  const escapedHexString = (<HTMLElement>e.target).innerText;
+
+  elInput.value = escapedHexString;
+  window.history.pushState({ text: escapedHexString }, "Input", `#${escapedHexString}`);
   elInput.focus();
-  render((<HTMLElement>e.target).innerText);
+
+  render(escapedHexString);
 });
