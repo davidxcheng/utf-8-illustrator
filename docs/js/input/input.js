@@ -1,23 +1,20 @@
+import events from "./custom-events.js";
 let elHtml = document.documentElement;
 let elInput;
 let currentInput = "";
 let currentInputIsEscapeSequence = false;
-// Matches unicode code point escape sequence. Ex: "\u{FEFF}"
-const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
-const events = {
-    // Cue for the UI to rerender
-    inputChanged: "inputchanged",
-    // Cue for the UI to tuck on a row at the end of the table
-    inputPushed: "inputpushed",
-    // Input is Unicode code point escape sequence (ie "\u{FEFF}")
-    hexInput: "hexinput",
-};
 export default {
     setupUI,
     set,
-    events
+    events,
 };
-function setupUI(elFrom, elTextInput) {
+/**
+ * Attach event listeners to the input field and the form
+ *
+ * @param elTextInput The text input element
+ * @param elFrom The form that the text input belongs to
+ */
+function setupUI(elTextInput, elFrom) {
     elInput = elTextInput;
     // Submitting the form causes a '?' to be added to the url
     elFrom.addEventListener("submit", e => e.preventDefault);
@@ -34,6 +31,8 @@ function set(incoming, isPopStateInduced = false) {
     currentInput = incoming;
     elInput.focus();
 }
+// Matches unicode code point escape sequence. Ex: "\u{FEFF}"
+const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 function disptachInputEvent(incoming, isPopStateInduced = false) {
     if (unicodeCodePointEscapeRegEx.test(incoming)) {
         // User input is Unicode code point escape (i.e. \u{FEFF}).

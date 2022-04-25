@@ -35,7 +35,7 @@ function renderFromHex(hex) {
 window.addEventListener("load", () => {
     const elForm = document.getElementById("frmInput");
     const elInput = document.getElementById("txtInput");
-    input.setupUI(elForm, elInput);
+    input.setupUI(elInput, elForm);
     elHtml.addEventListener(input.events.inputChanged, (e) => {
         const text = e.detail.input;
         rerender(text);
@@ -49,6 +49,7 @@ window.addEventListener("load", () => {
             window.history.pushState({ text }, "Input", `#${text}`);
     });
     elHtml.addEventListener(input.events.hexInput, (e) => {
+        console.log(`evnt fired: ${input.events.hexInput}`);
         renderFromHex(e.detail.hex);
         const text = e.detail.input;
         if (e.detail.isPopStateInduced === false)

@@ -1,44 +1,23 @@
+import events from "./custom-events.js";
+
 let elHtml = document.documentElement;
 let elInput: HTMLInputElement;
 let currentInput = "";
 let currentInputIsEscapeSequence = false;
 
-// Matches unicode code point escape sequence. Ex: "\u{FEFF}"
-const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
-
-type InputEventNames = {
-  inputChanged: "inputchanged",
-  inputPushed: "inputpushed",
-  hexInput: "hexinput"
-};
-
-const events: InputEventNames = {
-  // Cue for the UI to rerender
-  inputChanged: "inputchanged",
-
-  // Cue for the UI to tuck on a row at the end of the table
-  inputPushed: "inputpushed",
-
-  // Input is Unicode code point escape sequence (ie "\u{FEFF}")
-  hexInput: "hexinput",
-};
-
 export default {
   setupUI,
   set,
-  events
+  events,
 };
 
-// TypeScript hack to make tsc happy when adding event listener
-declare global {
-  interface HTMLElementEventMap {
-    inputchanged: CustomEvent,
-    inputpushed: CustomEvent,
-    hexinput: CustomEvent,
-  }
-}
-
-function setupUI(elFrom: HTMLFormElement, elTextInput: HTMLInputElement) {
+/**
+ * Attach event listeners to the input field and the form
+ *
+ * @param elTextInput The text input element
+ * @param elFrom The form that the text input belongs to
+ */
+function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
   elInput = elTextInput;
 
   // Submitting the form causes a '?' to be added to the url
@@ -59,6 +38,9 @@ function set(incoming: string, isPopStateInduced: boolean = false) {
 
   elInput.focus();
 }
+
+// Matches unicode code point escape sequence. Ex: "\u{FEFF}"
+const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 
 function disptachInputEvent(incoming: string, isPopStateInduced: boolean = false) {
   if (unicodeCodePointEscapeRegEx.test(incoming)) {

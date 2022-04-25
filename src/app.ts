@@ -44,7 +44,7 @@ window.addEventListener("load", () => {
   const elForm = <HTMLFormElement>document.getElementById("frmInput");
   const elInput = <HTMLInputElement>document.getElementById("txtInput");
 
-  input.setupUI(elForm, elInput);
+  input.setupUI(elInput, elForm);
 
   elHtml.addEventListener(input.events.inputChanged, (e: CustomEvent) => {
     const text = e.detail.input;
