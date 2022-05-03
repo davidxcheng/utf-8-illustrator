@@ -49,7 +49,6 @@ window.addEventListener("load", () => {
             window.history.pushState({ text }, "Input", `#${text}`);
     });
     elHtml.addEventListener(input.events.hexInput, (e) => {
-        console.log(`evnt fired: ${input.events.hexInput}`);
         renderFromHex(e.detail.hex);
         const text = e.detail.input;
         if (e.detail.isPopStateInduced === false)
@@ -61,12 +60,10 @@ window.addEventListener("load", () => {
             text = decodeURI(window.location.hash.slice(1));
         }
         catch (error) {
-            // Best effort: just show what's in the hash
             text = window.location.hash.slice(1);
         }
     }
     else {
-        // Default input (x, o, snowman, carrot)
         text = decodeURI("x%C3%B8%E2%98%83%F0%9F%A5%95");
     }
     input.set(text);

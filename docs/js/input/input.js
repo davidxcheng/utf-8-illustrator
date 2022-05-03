@@ -8,15 +8,8 @@ export default {
     set,
     events,
 };
-/**
- * Attach event listeners to the input field and the form
- *
- * @param elTextInput The text input element
- * @param elFrom The form that the text input belongs to
- */
 function setupUI(elTextInput, elFrom) {
     elInput = elTextInput;
-    // Submitting the form causes a '?' to be added to the url
     elFrom.addEventListener("submit", e => e.preventDefault);
     elTextInput.addEventListener("input", (e) => {
         const incomingText = e.target.value;
@@ -25,18 +18,14 @@ function setupUI(elTextInput, elFrom) {
     });
 }
 function set(incoming, isPopStateInduced = false) {
-    // Note: setting value will not trigger an input event
     elInput.value = incoming;
     disptachInputEvent(incoming, isPopStateInduced);
     currentInput = incoming;
     elInput.focus();
 }
-// Matches unicode code point escape sequence. Ex: "\u{FEFF}"
 const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 function disptachInputEvent(incoming, isPopStateInduced = false) {
     if (unicodeCodePointEscapeRegEx.test(incoming)) {
-        // User input is Unicode code point escape (i.e. \u{FEFF}).
-        // Abort normal flow and just show that char
         currentInputIsEscapeSequence = true;
         elHtml.dispatchEvent(new CustomEvent(events.hexInput, {
             detail: {
@@ -64,13 +53,8 @@ function disptachInputEvent(incoming, isPopStateInduced = false) {
     currentInputIsEscapeSequence = false;
 }
 function inputIsBeingExtendedByOneChar(incoming) {
-    // This doesn't detect chars that adds more than 1 to the length of the
-    // input (i.e. emoji) but this is supposed to be an optimization so it
-    // doesn't make sense to cover too many edge cases.
     return incoming.length - currentInput.length === 1
         && incoming.slice(0, -1) === currentInput
-        // Edge case: rerender when typing first char to display column headers
         && currentInput.length !== 0
-        // Edge case: rerender when breaking out of hex mode
         && currentInputIsEscapeSequence == false;
 }
