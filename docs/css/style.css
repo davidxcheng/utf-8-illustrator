@@ -50,6 +50,11 @@ td {
 
 .bin {
   color: lime;
+  text-align: right;
+}
+
+.bin b.bit {
+  cursor: pointer;
 }
 
 .hex {
