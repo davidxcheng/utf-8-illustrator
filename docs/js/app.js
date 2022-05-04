@@ -1,5 +1,6 @@
 import illustrator from "./illustrator/illustrator.js";
 import input from "./input/input.js";
+import bitFlipper from "./bit-flipper/bit-flipper.js";
 const elHtml = document.documentElement;
 const elHeaders = document.getElementById("headers");
 const elOutput = document.getElementById("output");
@@ -17,25 +18,26 @@ function rerender(text) {
     let ouputMarkup = "";
     for (const char of text) {
         const codePoint = char.codePointAt(0);
-        ouputMarkup += illustrator.createMarkup(char, codePoint);
+        ouputMarkup += illustrator.createMarkup(codePoint);
     }
     elOutput.innerHTML = ouputMarkup;
 }
 function renderPushedInput(char) {
     const template = document.createElement("template");
     const codePoint = char.codePointAt(0);
-    var markup = illustrator.createMarkup(char, codePoint);
-    template.innerHTML = markup;
+    template.innerHTML = illustrator.createMarkup(codePoint);
+    ;
     elOutput.appendChild(template.content);
 }
 function renderFromHex(hex) {
     const codePoint = parseInt(hex, 16);
-    elOutput.innerHTML = illustrator.createMarkup(`&#x${hex}`, codePoint);
+    elOutput.innerHTML = illustrator.createMarkup(codePoint);
 }
 window.addEventListener("load", () => {
     const elForm = document.getElementById("frmInput");
     const elInput = document.getElementById("txtInput");
     input.setupUI(elInput, elForm);
+    bitFlipper.setupUI(elOutput);
     elHtml.addEventListener(input.events.inputChanged, (e) => {
         const text = e.detail.input;
         rerender(text);

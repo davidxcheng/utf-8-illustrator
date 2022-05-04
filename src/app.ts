@@ -1,5 +1,6 @@
 import illustrator from "./illustrator/illustrator.js";
 import input from "./input/input.js";
+import bitFlipper from "./bit-flipper/bit-flipper.js";
 
 const elHtml = document.documentElement;
 const elHeaders = <HTMLElement>document.getElementById("headers");
@@ -20,7 +21,7 @@ function rerender(text: string): void {
 
   for(const char of text) {
     const codePoint = <number>char.codePointAt(0);
-    ouputMarkup += illustrator.createMarkup(char, codePoint);
+    ouputMarkup += illustrator.createMarkup(codePoint);
   }
 
   elOutput.innerHTML = ouputMarkup;
@@ -29,15 +30,14 @@ function rerender(text: string): void {
 function renderPushedInput(char: string) {
   const template = document.createElement("template");
   const codePoint = <number>char.codePointAt(0);
-  var markup = illustrator.createMarkup(char, codePoint);
 
-  template.innerHTML = markup;
+  template.innerHTML = illustrator.createMarkup(codePoint);;
   elOutput.appendChild(template.content);
 }
 
 function renderFromHex(hex: string) {
   const codePoint = parseInt(hex, 16);
-  elOutput.innerHTML = illustrator.createMarkup(`&#x${hex}`, codePoint);
+  elOutput.innerHTML = illustrator.createMarkup(codePoint);
 }
 
 window.addEventListener("load", () => {
@@ -45,6 +45,7 @@ window.addEventListener("load", () => {
   const elInput = <HTMLInputElement>document.getElementById("txtInput");
 
   input.setupUI(elInput, elForm);
+  bitFlipper.setupUI(elOutput);
 
   elHtml.addEventListener(input.events.inputChanged, (e: CustomEvent) => {
     const text = e.detail.input;
