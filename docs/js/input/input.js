@@ -23,7 +23,9 @@ function setupUI(elTextInput, elFrom) {
         elOutput.querySelectorAll("[data-hex]").forEach((elHex) => {
             hexCodePoints.push(parseInt(elHex.dataset["hex"], 16));
         });
-        elInput.value = String.fromCodePoint(...hexCodePoints);
+        elInput.value = currentInputIsEscapeSequence
+            ? `\\u{${hexCodePoints[0].toString(16)}}`
+            : String.fromCodePoint(...hexCodePoints);
     });
 }
 function set(incoming, isPopStateInduced = false) {

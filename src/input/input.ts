@@ -33,11 +33,14 @@ function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
 
   elHtml.addEventListener(bitFlipperEvents.bitFlipped, () => {
     let hexCodePoints: number[] = [];
+
     elOutput.querySelectorAll("[data-hex]").forEach((elHex: Element) => {
       hexCodePoints.push(parseInt(<string>(<HTMLElement>elHex).dataset["hex"], 16));
     });
 
-    elInput.value = String.fromCodePoint(...hexCodePoints);
+    elInput.value = currentInputIsEscapeSequence
+      ? `\\u{${hexCodePoints[0].toString(16)}}`
+      : String.fromCodePoint(...hexCodePoints);
   });
 }
 
