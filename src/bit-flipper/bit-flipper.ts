@@ -1,4 +1,7 @@
 import illustrator from "../illustrator/illustrator.js";
+import events from "./custom-events.js";
+
+const elHtml = document.documentElement;
 
 function setupUI(elOutput: HTMLElement) {
   elOutput.addEventListener("click", (e: MouseEvent) => {
@@ -13,6 +16,8 @@ function setupUI(elOutput: HTMLElement) {
       const codePoint = parseInt(elDec.innerText) ^ (1 << parseInt(elTarget.dataset.power));
 
       elRow.innerHTML = illustrator.createMarkup(codePoint, false);
+
+      elHtml.dispatchEvent(new CustomEvent(events.bitFlipped));
     }
   });
 }

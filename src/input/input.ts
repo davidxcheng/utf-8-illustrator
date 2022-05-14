@@ -1,6 +1,8 @@
 import events from "./custom-events.js";
+import bitFlipperEvents from "../bit-flipper/custom-events.js";
 
-let elHtml = document.documentElement;
+const elHtml = document.documentElement;
+const elOutput = <HTMLElement>document.getElementById("output");
 let elInput: HTMLInputElement;
 let currentInput = "";
 let currentInputIsEscapeSequence = false;
@@ -27,6 +29,15 @@ function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
     const incomingText = (<HTMLInputElement>e.target).value;
     disptachInputEvent(incomingText);
     currentInput = incomingText;
+  });
+
+  elHtml.addEventListener(bitFlipperEvents.bitFlipped, () => {
+    let hexCodePoints: number[] = [];
+    elOutput.querySelectorAll("[data-hex]").forEach((elHex: Element) => {
+      hexCodePoints.push(parseInt(<string>(<HTMLElement>elHex).dataset["hex"], 16));
+    });
+
+    elInput.value = String.fromCodePoint(...hexCodePoints);
   });
 }
 

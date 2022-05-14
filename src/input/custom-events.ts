@@ -14,7 +14,7 @@ declare global {
 // For some reason `public static readonly inputChanged: string = "inputchanged"` doesn't satisfy
 // tsc (v4.6.3) when calling addEventListener. The type must be `keyof HTMLElementEventMap` and
 // typing it as a string causes a compile time error
-class EventNames {
+export default class EventNames {
   // Cue for the UI to rerender
   public static readonly inputChanged = "inputchanged";
 
@@ -24,5 +24,3 @@ class EventNames {
   // Input is Unicode code point escape sequence (ie "\u{FEFF}")
   public static readonly hexInput = "hexinput";
 }
-
-export default EventNames;

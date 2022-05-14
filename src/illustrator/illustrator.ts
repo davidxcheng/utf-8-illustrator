@@ -23,7 +23,7 @@ function createMarkup(codePoint: number, includeRowTag: boolean = true): string 
   const columnsMarkup = `
     <td class="glyph">&#x${hex}</td>
     <td class="dec">${codePoint}</td>
-    <td class="hex"><a rel="nofollow noopener noreferrer" href="https://unicode-table.com/en/${hex}/">${hex}</a></td>
+    <td class="hex" data-hex="${hex}"><a rel="nofollow noopener noreferrer" href="https://unicode-table.com/en/${hex}/">${hex}</a></td>
     <td class="bin">${codePointToBinaryMarkup(codePoint)}</td>
     <td>${utf8OctetsMarkup}</td>
     <td class="hex">${utf8Hex}</td>
