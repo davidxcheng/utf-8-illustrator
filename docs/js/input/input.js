@@ -5,6 +5,8 @@ const elOutput = document.getElementById("output");
 let elInput;
 let currentInput = "";
 let currentInputIsEscapeSequence = false;
+const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
+const unicodeCodePointEscapeUpperCaseRegEx = /^\\u\{[A-F0-9]{1,6}\}$/;
 export default {
     setupUI,
     set,
@@ -20,12 +22,21 @@ function setupUI(elTextInput, elFrom) {
     });
     elHtml.addEventListener(bitFlipperEvents.bitFlipped, () => {
         let hexCodePoints = [];
+        let text = "";
         elOutput.querySelectorAll("[data-hex]").forEach((elHex) => {
             hexCodePoints.push(parseInt(elHex.dataset["hex"], 16));
         });
-        elInput.value = currentInputIsEscapeSequence
-            ? `\\u{${hexCodePoints[0].toString(16)}}`
-            : String.fromCodePoint(...hexCodePoints);
+        if (currentInputIsEscapeSequence) {
+            text = unicodeCodePointEscapeUpperCaseRegEx.test(currentInput)
+                ? `\\u{${hexCodePoints[0].toString(16).toUpperCase()}}`
+                : `\\u{${hexCodePoints[0].toString(16)}}`;
+        }
+        else {
+            text = String.fromCodePoint(...hexCodePoints);
+        }
+        elInput.value = text;
+        currentInput = text;
+        window.history.pushState({ text }, "Input", `#${text}`);
     });
 }
 function set(incoming, isPopStateInduced = false) {
@@ -34,7 +45,6 @@ function set(incoming, isPopStateInduced = false) {
     currentInput = incoming;
     elInput.focus();
 }
-const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
 function disptachInputEvent(incoming, isPopStateInduced = false) {
     if (unicodeCodePointEscapeRegEx.test(incoming)) {
         currentInputIsEscapeSequence = true;
