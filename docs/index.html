@@ -13,23 +13,25 @@
         <input id="txtInput" type="text" autofocus autocomplete="off" />
     </form>
     <table class="center">
-        <thead id="headers" class="hide">
-            <th>&nbsp;</th>
-            <th>dec</th>
-            <th>hex</th>
-            <th>bin</th>
-            <th>utf-8 (bin)</th>
-            <th>utf-8 (hex)</th>
+        <caption id="legend">
+            <span class="dec">n = Unicode code point</span>
+            <span class="header"><b>10</b> = utf-8 header</span>
+        </caption>
+        <thead id="headers">
+            <tr>
+                <th>&nbsp;</th>
+                <th>dec</th>
+                <th>hex</th>
+                <th>bin</th>
+                <th>utf-8 (bin)</th>
+                <th>utf-8 (hex)</th>
+            </tr>
         </thead>
         <tbody id="output">
 
         </tbody>
     </table>
     <div class="footer">
-        <div id="legend">
-            <span class="legend dec">n = Unicode code point</span>
-            <span class="legend header"><b>10</b> = utf-8 header</span>
-        </div>
         <div class="hint">
             Hint: type <q id="hintput">\u{1F4A9}</q> to input hex values
         </div>

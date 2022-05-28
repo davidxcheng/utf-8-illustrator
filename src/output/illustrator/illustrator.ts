@@ -12,9 +12,7 @@ import octetsToHex from "./octetsToHex.js";
  * @returns A string that contains markup for the illustration of the char
  *          and its encoding
  */
-export default { createMarkup };
-
-function createMarkup(codePoint: number, includeRowTag: boolean = true): string {
+export default function createMarkup(codePoint: number, includeRowTag: boolean = true): string {
   //const bin = codePoint.toString(2);
   const hex = codePoint.toString(16);
   const octets: string[] = codePointToUtf8(codePoint);

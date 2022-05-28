@@ -1,8 +1,15 @@
+* { box-sizing: border-box; }
+
 body {
+  /* flex so that the footer stays nicely at the bottom  */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background: black;
   font-family: courier;
   text-align: center;
-  margin: 24px 0;
+  margin: 0;
+  padding: 24px 0 4px 0;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -18,6 +25,23 @@ input[type=text] {
 
 table.center {
   margin: 8px auto;
+}
+
+caption {
+  caption-side: bottom;
+  font-size: 12px;
+  margin-top: 12px;
+  opacity: .5;
+}
+
+caption:hover {
+  opacity: 1;
+}
+
+caption > span {
+  margin: 0 4px;
+  white-space: nowrap;
+  word-spacing: -.5ch;
 }
 
 th {
@@ -87,12 +111,11 @@ td {
 }
 
 .footer {
-  position: fixed;
+  margin-top: auto;
   bottom: 0;
   left: 0;
   right: 0;
   background: transparent;
-  padding: 4px;
   font-size: 12px;
 }
 
@@ -100,18 +123,8 @@ td {
   opacity: .5;
 }
 
-.footer > div#legend {
-  opacity: .6;
-}
-
-.footer > div:hover, .footer > div#legend:hover {
+.footer > div:hover {
   opacity: 1;
-}
-
-#legend > span {
-  margin: 0 4px;
-  white-space: nowrap;
-  word-spacing: -.5ch;
 }
 
 .hint {

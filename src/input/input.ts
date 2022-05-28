@@ -1,8 +1,7 @@
-import events from "./custom-events.js";
-import bitFlipperEvents from "../bit-flipper/custom-events.js";
+import events from "./customEvents.js";
+import outputEvents from "../output/customEvents.js";
 
 const elHtml = document.documentElement;
-const elOutput = <HTMLElement>document.getElementById("output");
 let elInput: HTMLInputElement;
 let currentInput = "";
 let currentInputIsEscapeSequence = false;
@@ -35,15 +34,12 @@ function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
     currentInput = incomingText;
   });
 
-  elHtml.addEventListener(bitFlipperEvents.bitFlipped, () => {
-    let hexCodePoints: number[] = [];
+  elHtml.addEventListener(outputEvents.bitFlipped, (e: CustomEvent) => {
+    const hexCodePoints: number[] = e.detail.hexCodePoints;
     let text = "";
 
-    elOutput.querySelectorAll("[data-hex]").forEach((elHex: Element) => {
-      hexCodePoints.push(parseInt(<string>(<HTMLElement>elHex).dataset["hex"], 16));
-    });
-
     if (currentInputIsEscapeSequence) {
+      // Try to detect the casing of the hex (won't work if casing is mixed)
       text = unicodeCodePointEscapeUpperCaseRegEx.test(currentInput)
         ? `\\u{${hexCodePoints[0].toString(16).toUpperCase()}}`
         : `\\u{${hexCodePoints[0].toString(16)}}`;
@@ -54,6 +50,12 @@ function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
     elInput.value = text;
     currentInput = text;
     window.history.pushState({ text }, "Input", `#${text}`);
+  });
+
+  window.addEventListener("popstate", (e: PopStateEvent) => {
+    if (e.state) {
+      set(e.state.text, true);
+    }
   });
 }
 
@@ -67,6 +69,8 @@ function set(incoming: string, isPopStateInduced: boolean = false) {
 }
 
 function disptachInputEvent(incoming: string, isPopStateInduced: boolean = false) {
+  currentInputIsEscapeSequence = false;
+
   if (unicodeCodePointEscapeRegEx.test(incoming)) {
     // User input is Unicode code point escape (i.e. \u{FEFF}).
     // Abort normal flow and just show that char
@@ -74,29 +78,25 @@ function disptachInputEvent(incoming: string, isPopStateInduced: boolean = false
     elHtml.dispatchEvent(new CustomEvent(events.hexInput, {
       detail: {
         hex: incoming.slice(3, -1),
-        input: incoming,
-        isPopStateInduced
+        input: incoming
       },
     }));
-
-    return;
-  }
-
-  if (inputIsBeingExtendedByOneChar(incoming)) {
+  } else if (inputIsBeingExtendedByOneChar(incoming)) {
     elHtml.dispatchEvent(new CustomEvent(events.inputPushed, {
       detail: {
         pushedChar: incoming.slice(-1),
-        input: incoming,
-        isPopStateInduced
+        input: incoming
       }
     }));
   } else {
     elHtml.dispatchEvent(new CustomEvent(events.inputChanged, {
-      detail: { input: incoming, isPopStateInduced },
+      detail: { input: incoming },
     }));
   }
 
-  currentInputIsEscapeSequence = false;
+  if (isPopStateInduced === false) {
+    window.history.pushState({ text: incoming }, "Input", `#${incoming}`);
+  }
 }
 
 function inputIsBeingExtendedByOneChar(incoming: string): boolean {
@@ -108,5 +108,5 @@ function inputIsBeingExtendedByOneChar(incoming: string): boolean {
     // Edge case: rerender when typing first char to display column headers
     && currentInput.length !== 0
     // Edge case: rerender when breaking out of hex mode
-    && currentInputIsEscapeSequence == false;
+    && currentInputIsEscapeSequence === false;
 }
