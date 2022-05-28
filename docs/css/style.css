@@ -1,10 +1,6 @@
 * { box-sizing: border-box; }
 
 body {
-  /* flex so that the footer stays nicely at the bottom  */
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
   background: black;
   font-family: courier;
   text-align: center;
@@ -23,25 +19,13 @@ input[type=text] {
   text-align: center;
 }
 
+.scroll-wrapper {
+  width: 100vw;
+  overflow-x: auto;
+}
+
 table.center {
   margin: 8px auto;
-}
-
-caption {
-  caption-side: bottom;
-  font-size: 12px;
-  margin-top: 12px;
-  opacity: .5;
-}
-
-caption:hover {
-  opacity: 1;
-}
-
-caption > span {
-  margin: 0 4px;
-  white-space: nowrap;
-  word-spacing: -.5ch;
 }
 
 th {
@@ -110,21 +94,32 @@ td {
   opacity: .5;
 }
 
-.footer {
-  margin-top: auto;
+footer {
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   background: transparent;
   font-size: 12px;
+  padding: 4px;
 }
 
-.footer > div {
-  opacity: .5;
+footer > div {
+  opacity: .65;
+  white-space: nowrap;
+  word-spacing: -.5ch;
 }
 
-.footer > div:hover {
+footer > div:hover {
   opacity: 1;
+}
+
+footer img {
+  vertical-align: bottom;
+}
+
+#legend > span {
+  margin: 0 4px;
 }
 
 .hint {
@@ -142,5 +137,6 @@ td {
 }
 
 .learn-more > sub {
+  margin-left: 3px;
   vertical-align: middle;
 }
