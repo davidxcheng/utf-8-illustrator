@@ -19,9 +19,11 @@ Shout out to some great resources about utf-8, Unicode, emoji etc:
 
 ## Local development
 
-To run it on `http://localhost:8000`:
+For local development on `http://localhost:8000`, first run `npm install` and then:
 
 ```
-npm install
-npm run dev
+npm run dev &
+tsc --watch &
 ```
+
+Note to self: list background tasks with `jobs` and use `kill %{jobId}` to stop a task.
