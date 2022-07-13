@@ -47,9 +47,8 @@ function set(incoming, isPopStateInduced = false) {
     elInput.focus();
 }
 function disptachInputEvent(incoming, isPopStateInduced = false) {
-    currentInputIsEscapeSequence = false;
-    if (unicodeCodePointEscapeRegEx.test(incoming)) {
-        currentInputIsEscapeSequence = true;
+    const incomingIsEscapeSequence = unicodeCodePointEscapeRegEx.test(incoming);
+    if (incomingIsEscapeSequence) {
         elHtml.dispatchEvent(new CustomEvent(events.hexInput, {
             detail: {
                 hex: incoming.slice(3, -1),
@@ -70,6 +69,8 @@ function disptachInputEvent(incoming, isPopStateInduced = false) {
             detail: { input: incoming },
         }));
     }
+    currentInputIsEscapeSequence = incomingIsEscapeSequence;
+    ;
     if (isPopStateInduced === false) {
         window.history.pushState({ text: incoming }, "Input", `#${incoming}`);
     }

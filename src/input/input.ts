@@ -69,12 +69,11 @@ function set(incoming: string, isPopStateInduced: boolean = false) {
 }
 
 function disptachInputEvent(incoming: string, isPopStateInduced: boolean = false) {
-  currentInputIsEscapeSequence = false;
+  const incomingIsEscapeSequence = unicodeCodePointEscapeRegEx.test(incoming);
 
-  if (unicodeCodePointEscapeRegEx.test(incoming)) {
+  if (incomingIsEscapeSequence) {
     // User input is Unicode code point escape (i.e. \u{FEFF}).
     // Abort normal flow and just show that char
-    currentInputIsEscapeSequence = true;
     elHtml.dispatchEvent(new CustomEvent(events.hexInput, {
       detail: {
         hex: incoming.slice(3, -1),
@@ -93,6 +92,8 @@ function disptachInputEvent(incoming: string, isPopStateInduced: boolean = false
       detail: { input: incoming },
     }));
   }
+
+  currentInputIsEscapeSequence = incomingIsEscapeSequence;;
 
   if (isPopStateInduced === false) {
     window.history.pushState({ text: incoming }, "Input", `#${incoming}`);
