@@ -3,8 +3,6 @@
 declare global {
   interface HTMLElementEventMap {
     inputchanged: CustomEvent,
-    inputpushed: CustomEvent,
-    hexinput: CustomEvent,
   }
 }
 
@@ -17,10 +15,4 @@ declare global {
 export default class EventNames {
   // Cue for the UI to rerender
   public static readonly inputChanged = "inputchanged";
-
-  // Cue for the UI to tuck on a row at the end of the table
-  public static readonly inputPushed = "inputpushed";
-
-  // Input is Unicode code point escape sequence (ie "\u{FEFF}")
-  public static readonly hexInput = "hexinput";
 }

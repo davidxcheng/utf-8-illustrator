@@ -12,22 +12,14 @@ export default { setupUI };
 
 function setupUI() {
   elHtml.addEventListener(input.events.inputChanged, (e: CustomEvent) => {
-    rerender(e.detail.input);
-  });
-
-  elHtml.addEventListener(input.events.inputPushed, (e: CustomEvent) => {
-    renderPushedInput(e.detail.pushedChar);
-  });
-
-  elHtml.addEventListener(input.events.hexInput, (e: CustomEvent) => {
-    renderFromHex(e.detail.hex);
+    rerender(<number[]>e.detail.codePoints);
   });
 
   bitFlipper.setupUI(elOutput);
 }
 
-function rerender(text: string): void {
-  if (text.length === 0) {
+function rerender(codePoints: number[]): void {
+  if (codePoints.length === 0) {
     elHeaders.classList.add("hide");
     elLegend.classList.add("hide")
   } else {
@@ -37,8 +29,7 @@ function rerender(text: string): void {
 
   let ouputMarkup = "";
 
-  for(const char of text) {
-    const codePoint = <number>char.codePointAt(0);
+  for(const codePoint of codePoints) {
     ouputMarkup += createMarkup(codePoint);
   }
 
@@ -51,9 +42,4 @@ function renderPushedInput(char: string) {
 
   template.innerHTML = createMarkup(codePoint);;
   elOutput.appendChild(template.content);
-}
-
-function renderFromHex(hex: string) {
-  const codePoint = parseInt(hex, 16);
-  elOutput.innerHTML = createMarkup(codePoint);
 }

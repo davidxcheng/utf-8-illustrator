@@ -8,18 +8,12 @@ const elLegend = document.getElementById("legend");
 export default { setupUI };
 function setupUI() {
     elHtml.addEventListener(input.events.inputChanged, (e) => {
-        rerender(e.detail.input);
-    });
-    elHtml.addEventListener(input.events.inputPushed, (e) => {
-        renderPushedInput(e.detail.pushedChar);
-    });
-    elHtml.addEventListener(input.events.hexInput, (e) => {
-        renderFromHex(e.detail.hex);
+        rerender(e.detail.codePoints);
     });
     bitFlipper.setupUI(elOutput);
 }
-function rerender(text) {
-    if (text.length === 0) {
+function rerender(codePoints) {
+    if (codePoints.length === 0) {
         elHeaders.classList.add("hide");
         elLegend.classList.add("hide");
     }
@@ -28,8 +22,7 @@ function rerender(text) {
         elLegend.classList.remove("hide");
     }
     let ouputMarkup = "";
-    for (const char of text) {
-        const codePoint = char.codePointAt(0);
+    for (const codePoint of codePoints) {
         ouputMarkup += createMarkup(codePoint);
     }
     elOutput.innerHTML = ouputMarkup;
@@ -40,8 +33,4 @@ function renderPushedInput(char) {
     template.innerHTML = createMarkup(codePoint);
     ;
     elOutput.appendChild(template.content);
-}
-function renderFromHex(hex) {
-    const codePoint = parseInt(hex, 16);
-    elOutput.innerHTML = createMarkup(codePoint);
 }
