@@ -12,13 +12,11 @@ function setupUI(elOutput) {
             const elDec = elRow === null || elRow === void 0 ? void 0 : elRow.children[1];
             const codePoint = parseInt(elDec.innerText) ^ (1 << parseInt(elTarget.dataset.power));
             elRow.innerHTML = createMarkup(codePoint, false);
-            let hexCodePoints = [];
-            elOutput.querySelectorAll("[data-hex]").forEach((elHex) => {
-                hexCodePoints.push(parseInt(elHex.dataset["hex"], 16));
-            });
+            const rowIndex = Array.from(elRow.parentNode.children).indexOf(elRow);
             elHtml.dispatchEvent(new CustomEvent(events.bitFlipped, {
                 detail: {
-                    hexCodePoints
+                    rowIndex,
+                    codePoint
                 }
             }));
         }
