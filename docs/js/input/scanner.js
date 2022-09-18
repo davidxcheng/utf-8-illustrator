@@ -1,15 +1,12 @@
-export default {
-    scan
-};
 const unicodeEscSeqPrefix = ["\\", "u", "{"];
 const hexRange = /([0-9A-F])/i;
-function scan(incoming) {
+export function scan(incoming) {
     let codePoints = [];
     const iterator = incoming[Symbol.iterator]();
     var chr = iterator.next();
     while (!chr.done) {
         if (chr.value !== unicodeEscSeqPrefix[0])
-            codePoints.push(chr.value.codePointAt(0));
+            codePoints.push({ codePoint: chr.value.codePointAt(0), sourceIsEscSeq: false });
         else
             codePoints = codePoints.concat(maybeResolveCodePointFromEscSeq(iterator));
         chr = iterator.next();
@@ -24,22 +21,22 @@ function maybeResolveCodePointFromEscSeq(iterator) {
         var chr = iterator.next();
         i++;
         if (chr.done)
-            return codePoints;
+            return codePoints.map(x => ({ codePoint: x, sourceIsEscSeq: false }));
         codePoints.push(chr.value.codePointAt(0));
         if (i < 3 && chr.value != unicodeEscSeqPrefix[i])
-            return codePoints;
+            return codePoints.map(x => ({ codePoint: x, sourceIsEscSeq: false }));
         if (i === 3 && hexRange.test(chr.value) === false)
-            return codePoints;
+            return codePoints.map(x => ({ codePoint: x, sourceIsEscSeq: false }));
         if (i >= 3 && i <= 9) {
             if (chr.value === "}") {
-                return [parseInt(hex.join(""), 16)];
+                return [{ codePoint: parseInt(hex.join(""), 16), sourceIsEscSeq: true }];
             }
             if (!hexRange.test(chr.value))
-                return codePoints;
+                return codePoints.map(x => ({ codePoint: x, sourceIsEscSeq: false }));
             hex.push(chr.value);
         }
         else if (i > 9) {
-            return codePoints;
+            return codePoints.map(x => ({ codePoint: x, sourceIsEscSeq: false }));
         }
     }
 }

@@ -18,19 +18,14 @@ function setupUI(elOutput: HTMLElement) {
       // Resolve the new decimal value by applying a XOR mask where 1 is
       // shifted {power} bits to the left (https://bit.ly/3MOF76F)
       const codePoint = parseInt(elDec.innerText) ^ (1 << parseInt(elTarget.dataset.power));
-
       elRow.innerHTML = createMarkup(codePoint, false);
 
-      let hexCodePoints: number[] = [];
-
-      elOutput.querySelectorAll("[data-hex]").forEach((elHex: Element) => {
-        hexCodePoints.push(parseInt(<string>(<HTMLElement>elHex).dataset["hex"], 16));
-      });
+      const rowIndex = Array.from((<HTMLElement>elRow.parentNode).children).indexOf(elRow);
 
       elHtml.dispatchEvent(new CustomEvent(events.bitFlipped, {
         detail: {
-          // The code points (as hex) in the output
-          hexCodePoints
+          rowIndex,
+          codePoint
         }
       }));
     }

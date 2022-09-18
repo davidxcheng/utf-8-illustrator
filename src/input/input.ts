@@ -1,15 +1,10 @@
 import events from "./customEvents.js";
 import outputEvents from "../output/customEvents.js";
-import scanner from "./scanner.js";
+import {scan, Token} from "./scanner.js";
 
 const elHtml = document.documentElement;
 let elInput: HTMLInputElement;
-let currentInput = "";
-let currentInputIsEscapeSequence = false;
-
-// Matches unicode code point escape sequence. Ex: "\u{FEFF}"
-const unicodeCodePointEscapeRegEx = /^\\u\{[A-Fa-f0-9]{1,6}\}$/;
-const unicodeCodePointEscapeUpperCaseRegEx = /^\\u\{[A-F0-9]{1,6}\}$/;
+let currentTokens: Token[] = [];
 
 export default {
   setupUI,
@@ -31,27 +26,19 @@ function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
 
   elTextInput.addEventListener("input", (e: Event) => {
     const incomingText = (<HTMLInputElement>e.target).value;
-    const incomingCodePoints = scanner.scan(incomingText);
-    
-    dispatchInputEvent(incomingText, incomingCodePoints);
-    currentInput = incomingText;
+    const tokens = scan(incomingText);
+
+    dispatchInputEvent(incomingText, tokens.map(x => x.codePoint));
+    currentTokens = tokens;
   });
 
   elHtml.addEventListener(outputEvents.bitFlipped, (e: CustomEvent) => {
-    const hexCodePoints: number[] = e.detail.hexCodePoints;
-    let text = "";
+    const { rowIndex: index, codePoint } = e.detail;
+    currentTokens[index].codePoint = codePoint;
 
-    if (currentInputIsEscapeSequence) {
-      // Try to detect the casing of the hex (won't work if casing is mixed)
-      text = unicodeCodePointEscapeUpperCaseRegEx.test(currentInput)
-        ? `\\u{${hexCodePoints[0].toString(16).toUpperCase()}}`
-        : `\\u{${hexCodePoints[0].toString(16)}}`;
-    } else {
-      text = String.fromCodePoint(...hexCodePoints);
-    }
+    const text = resolveInputStringFromCurrentTokens();
 
     elInput.value = text;
-    currentInput = text;
     window.history.pushState({ text }, "Input", `#${text}`);
   });
 
@@ -62,12 +49,29 @@ function setupUI(elTextInput: HTMLInputElement, elFrom: HTMLFormElement) {
   });
 }
 
+function resolveInputStringFromCurrentTokens() {
+  const codePoints = currentTokens.reduce<number[]>((acc, curr) => {
+    if (curr.sourceIsEscSeq) {
+      const hex = curr.codePoint.toString(16);
+      const hexDigitsAsCodePoints: number[] = <number[]>([...hex].map(hexDigit => hexDigit.codePointAt(0)));
+      // 92 = '\', 117 = 'u', 123 = '{', 125 = '}'
+      acc.push(92, 117, 123, ...hexDigitsAsCodePoints, 125);
+    } else {
+      acc.push(curr.codePoint);
+    }
+
+    return acc;
+  }, []);
+
+  return String.fromCodePoint(...codePoints)
+}
+
 function set(incoming: string, isPopStateInduced: boolean = false) {
   // Note: setting value will not trigger an input event
   elInput.value = incoming;
-  const incomingCodePoints = scanner.scan(incoming);
-  dispatchInputEvent(incoming, incomingCodePoints, isPopStateInduced);
-  currentInput = incoming;
+  const tokens = scan(incoming);
+  dispatchInputEvent(incoming, tokens.map(x => x.codePoint), isPopStateInduced);
+  currentTokens = tokens;
 
   elInput.focus();
 }
