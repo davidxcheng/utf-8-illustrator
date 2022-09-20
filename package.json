@@ -6,5 +6,8 @@
   "scripts": {
     "dev": "node dev-server",
     "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.3"
   }
 }
