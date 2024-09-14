@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "finalhandler": "^1.1.1",
-    "serve-static": "^1.13.2"
+    "serve-static": "^1.16.2"
   },
   "scripts": {
     "dev": "node dev-server",
