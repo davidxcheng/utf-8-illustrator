@@ -48,6 +48,20 @@ td {
   text-align: left;
 }
 
+@media screen and (width >= 1250px) {
+  input[type=text] {
+    font-size: 34px;
+  }
+
+  th {
+    font-size: 16px;
+  }
+
+  td {
+    font-size: 20px;
+  }
+}
+
 .glyph {
   color: ghostwhite;
 }
